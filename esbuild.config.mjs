@@ -1,3 +1,4 @@
+import { rm } from 'node:fs/promises'
 import esbuild from 'esbuild'
 import copyPluginPkg from '@sprout2000/esbuild-copy-plugin'
 
@@ -18,4 +19,5 @@ const options = {
     ],
 }
 
+await rm('./lib/assets', { recursive: true, force: true })
 await esbuild.build(options)

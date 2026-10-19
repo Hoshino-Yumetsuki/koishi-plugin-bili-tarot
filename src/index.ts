@@ -1,3 +1,4 @@
+import { randomInt } from "node:crypto";
 import { Context, Schema, h } from "koishi";
 import { getTarotData } from "./data";
 import { isUpright } from "./utils";
@@ -18,7 +19,7 @@ export function apply(ctx: Context) {
 
     // 如果牌组为空,重新洗牌
     if (shuffledDeck.length === 0) {
-      shuffledDeck = [...Array(22).keys()];
+      shuffledDeck = [...data.keys()];
       // 使用 Fisher-Yates 洗牌算法
       for (let i = shuffledDeck.length - 1; i > 0; i--) {
         const j = Math.floor(Math.random() * (i + 1));
@@ -34,7 +35,7 @@ export function apply(ctx: Context) {
     await session.send(`看看
       ${h("at", { id: session.userId })}
       抽到了什么：
-      ${h.image(card.picBuffer, 'image/webp')}
+      ${h.image(card.picBuffers[randomInt(card.picBuffers.length)], 'image/webp')}
       ${card.name}（${upright ? "正位" : "逆位"}）：
       ${h("br")}${upright ? card.upText : card.reversedText}`);
   });

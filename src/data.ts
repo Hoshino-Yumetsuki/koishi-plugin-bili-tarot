@@ -8,8 +8,8 @@ import reversedTexts from './reversedText.json';
 import tarotImgs from './picUrl.json';
 
 export interface ITarot {
-  /** 图片 Buffer */
-  picBuffer: Buffer;
+  /** 可选牌面 Buffer */
+  picBuffers: Buffer[];
   /** 正位描述文案 */
   upText: string;
   /** 逆位描述文案 */
@@ -25,7 +25,9 @@ export async function getTarotData(): Promise<ITarot[]> {
 
   const tarotData = await Promise.all(
     (Object.keys(tarotNames) as Array<keyof typeof tarotNames>).map(async (key) => ({
-      picBuffer: await fs.readFile(path.join(__dirname, tarotImgs[key])),
+      picBuffers: await Promise.all(tarotImgs[key].map((image) =>
+        fs.readFile(path.join(__dirname, image))
+      )),
       upText: upTexts[key],
       reversedText: reversedTexts[key],
       name: tarotNames[key],
