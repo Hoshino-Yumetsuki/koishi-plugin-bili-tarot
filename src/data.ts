@@ -24,7 +24,7 @@ export async function getTarotData(): Promise<ITarot[]> {
   if (cachedTarotData) return cachedTarotData;
 
   const tarotData = await Promise.all(
-    Object.keys(tarotNames).map(async (key) => ({
+    (Object.keys(tarotNames) as Array<keyof typeof tarotNames>).map(async (key) => ({
       picBuffer: await fs.readFile(path.join(__dirname, tarotImgs[key])),
       upText: upTexts[key],
       reversedText: reversedTexts[key],
